@@ -9,7 +9,7 @@ env:
   ECR_REPOSITORY: my-flask-app         
   ECS_SERVICE: my-flask-app                
   ECS_CLUSTER: my-flask-app-cluster                
-  ECS_TASK_DEFINITION: my-flask-app-task                
+  ECS_TASK_DEFINITION: my-flask-app-task:1                
   CONTAINER_NAME: my-flask-app           
                                              
 
