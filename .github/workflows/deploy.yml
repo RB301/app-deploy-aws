@@ -8,7 +8,7 @@ env:
   AWS_REGION: us-east-1                 
   ECR_REPOSITORY: my-flask-app                      
   ECS_CLUSTER: my-flask-app-cluster                
-  ECS_TASK_DEFINITION: my-flask-app-task:1           
+  ECS_TASK_DEFINITION: arn:aws:ecs:us-east-1:303981612052:task-definition/my-flask-app-task:1         
   CONTAINER_NAME: my-flask-app           
                                              
 
@@ -48,14 +48,18 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
+    - name: Download task definition
+    run: |
+        aws ecs describe-task-definition --task-definition ${{ vars.MY_ECS_TASK_DEFINITION }} \
+        --query taskDefinition > task-definition.json
+        
     - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
+    id: task-def
+    uses: aws-actions/amazon-ecs-render-task-definition@v1
+    with:
+      task-definition: ${{ env.ECS_TASK_DEFINITION }}
+      container-name: ${{ env.CONTAINER_NAME }}
+      image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
