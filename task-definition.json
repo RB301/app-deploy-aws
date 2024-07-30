@@ -37,7 +37,6 @@
     ],
     "cpu": "1024",
     "memory": "3072",
-    "registeredAt": "2024-07-26T16:13:04.098Z",
-    "registeredBy": "arn:aws:iam::303981612052:user/rasbal",
-    "tags": []
+    "registeredAt": "2024-07-26T17:13:04.098000+01:00",
+    "registeredBy": "arn:aws:iam::303981612052:user/rasbal"
 }
